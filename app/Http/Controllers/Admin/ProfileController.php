@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 
 class ProfileController extends Controller
 {
-  public function add()
+    public function add()
     {
         return view('admin.profile.create');
     }
@@ -29,4 +29,7 @@ class ProfileController extends Controller
     //
 }
 
- 
+     Route::group(['prefix' => '××××'], function() {
+         Route::get('×××', 'AAAController\bbb@add');
+     });
+     
