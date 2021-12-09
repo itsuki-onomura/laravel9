@@ -27,9 +27,10 @@ class ProfileController extends Controller
         return redirect('admin/profile/edit');
     } 
     //
+  
 }
 
-     Route::group(['prefix' => '××××'], function() {
-         Route::get('×××', 'AAAController\bbb@add');
-     });
-     
+   
+  
+  
+    

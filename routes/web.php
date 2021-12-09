@@ -12,22 +12,19 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('Welcome');
 });
 
 Route::group(['prefix' => 'admin'], function() {
-    Route::get('profil/create', 'Admin\ProfileController@add')->middleware('auth');
+    Route::get('profile/create', 'Admin\ProfileController@add')->middleware('auth');
 });
 
 Route::group(['prefix' => 'admin'], function() {
-    Route::get('profil/edit', 'Admin\ProfileController@edit Action')->middleware('auth');
+    Route::get('profile/edit', 'Admin\ProfileController@edit')->middleware('auth');
 });
 
 
 
-Route::group(['prefix' => '×××××'], function() {
-        Route::get('news/create', 'AAAController\bbb@add');
-});
 
 
 Route::group(['prefix' => 'admin'], function() {
@@ -36,3 +33,9 @@ Route::group(['prefix' => 'admin'], function() {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
+     Route::get('news/create', 'Admin\NewsController@add');
+     Route::post('news/create', 'Admin\ProfileController@create'); # 追記
+     Route::post('profile/edit', 'Admin\ProfileController@update');
+});
