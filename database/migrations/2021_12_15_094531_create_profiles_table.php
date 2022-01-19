@@ -15,9 +15,9 @@ class CreateProfilesTable extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->bigIncrements('id');
-             $table->string('name'); // ニュースのタイトルを保存するカラム
+             $table->string('name'); // 名前を保存するカラム
              $table->string('gender');// ニュースの本文を保存するカラム
-             $table->string('hobyy');
+             $table->string('hobby');
              $table->string('introduction');
             $table->string('image_path')->nullable();  // 画像のパスを保存するカラム
             $table->timestamps();

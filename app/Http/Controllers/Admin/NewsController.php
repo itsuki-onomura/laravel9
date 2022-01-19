@@ -8,10 +8,21 @@ use App\Http\Controllers\Controller;
 // 以下を追記することでNews Modelが扱えるようになる
 use App\News;
 
+// 以下を追記
+use App\History;
+
+// 以下を追記
+use Carbon\Carbon;
+
 class NewsController extends Controller
 {
  public function add()
   {
+    //９行目のファイルをインスタンス化して使えるようにしている
+      $news = new News;
+      $news->title = "hoget";
+      $news->body = "hogeb";
+      $news->save();
       return view('admin.news.create');
   }
     //
@@ -23,7 +34,7 @@ class NewsController extends Controller
       
       $news = new News;
       $form = $request->all();
-      
+      /*
       // フォームから画像が送信されてきたら、保存して、$news->image_path に画像のパスを保存する
       if (isset($form['image'])) {
         $path = $request->file('image')->store('public/image');
@@ -39,6 +50,9 @@ class NewsController extends Controller
       
       // データベースに保存する
       $news->fill($form);
+      */
+      $news->title = $request->title;
+      $news->body = $request->body;
       $news->save();
       // admin/news/createにリダイレクトする
       return redirect('admin/news/create');
@@ -55,6 +69,56 @@ class NewsController extends Controller
       }
       return view('admin.news.index', ['posts' => $posts, 'cond_title' => $cond_title]);
   }
-}
+ 
+// 以下を追記
 
+  public function edit(Request $request)
+  {
+      // News Modelからデータを取得する
+      $news = News::find($request->id);
+      if (empty($news)) {
+        abort(404);    
+      }
+      return view('admin.news.edit', ['news_form' => $news]);
+  }
+
+  public function update(Request $request)
+  {
+     $this->validate($request, News::$rules);
+        $news = News::find($request->id);
+        $news_form = $request->all();
+        if ($request->remove == 'true') {
+            $news_form['image_path'] = null;
+        } elseif ($request->file('image')) {
+            $path = $request->file('image')->store('public/image');
+            $news_form['image_path'] = basename($path);
+        } else {
+            $news_form['image_path'] = $news->image_path;
+        }
+
+        unset($news_form['_token']);
+        unset($news_form['image']);
+        unset($news_form['remove']);
+        $news->fill($news_form)->save();
+
+        // 以下を追記
+        $history = new History();
+        $history->news_id = $news->id;
+        $history->edited_at = Carbon::now();
+        $history->save();
+
+      return redirect('admin/news/');
+  }
+
+  // 以下を追記　　
+  public function delete(Request $request)
+  {
+      // 該当するNews Modelを取得
+      $news = News::find($request->id);
+      // 削除する
+      $news->delete();
+      return redirect('admin/news/');
+  }  
+
+}
 

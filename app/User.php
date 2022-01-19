@@ -8,11 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-  User::create([
-            'name' => '森本',
-            'email' => 'morimoto@tech.com',
-            'password' => Hash::make("pass"),
-       ]);  
+
     use Notifiable;
 
     /**
